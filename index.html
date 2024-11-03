@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>snake and ladder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            position: relative; /* Add relative positioning to the body */
+            height: 100vh; /* Set body height to full viewport height */
+        }
+        h1 {
+            color: #0066cc;
+            text-shadow: 2px 2px 4px #aaa;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        img.dice {
+            max-width: 70px;
+            height: 70px;
+            border: 2px solid #ccc;
+            box-shadow: 4px 4px 8px #bbb;
+            border-radius: 8px;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        img.dice:hover {
+            transform: scale(1.05);
+        }
+        input {
+            display: block;
+            margin: 20px auto; /* Centered the button horizontally */
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        img.snake {
+            max-width: 90%;
+            height: 500px;
+            margin-left: 86px;
+        }
+        .pointer {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid black; /* Added border for better visibility */
+        }
+        #pointer-red {
+            background-color: red;
+            top: 50%; /* Initial positioning to make it visible */
+            left: 50%; /* Initial positioning to make it visible */
+            transform: translate(-50%, -50%); /* Center the pointer */
+        }
+        #pointer-blue {
+            background-color: blue;
+            top: 50%; /* Initial positioning to make it visible */
+            left: 60%; /* Initial positioning to make it visible */
+            transform: translate(-50%, -50%); /* Center the pointer */
+        }
+        #pointer-green {
+            background-color: green;
+            top: 50%; /* Initial positioning to make it visible */
+            left: 70%; /* Initial positioning to make it visible */
+            transform: translate(-50%, -50%); /* Center the pointer */
+        }
+        #pointer-yellow {
+            background-color: yellow;
+            top: 50%; /* Initial positioning to make it visible */
+            left: 80%; /* Initial positioning to make it visible */
+            transform: translate(-50%, -50%); /* Center the pointer */
+        }
+
+        .cont{
+            display: flex;
+        }
+        .left{
+            width: 20%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Snake and Ladder</h1>
+    <div class="cont">
+        <div class="left">
+            <!-- <p>This is a simple webpage created as an example. It includes a heading, a paragraph, and a photo.</p> -->
+            <form action="/roll" method="post">
+                <img src="/static/{{ dice_img }}" alt="Example Photo" class="dice">
+                <input type="submit" value="Roll">
+            </form>
+        </div>
+        <img class="snake" src="/static/i984_pimgpsh_fullsize_distr.webp" alt="">
+    </div>
+
+    <!-- Add pointers -->
+    <div class="pointer" id="pointer-red"></div>
+    <div class="pointer" id="pointer-blue"></div>
+    <div class="pointer" id="pointer-green"></div>
+    <div class="pointer" id="pointer-yellow"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pointers = document.querySelectorAll('.pointer');
+
+            pointers.forEach(pointer => {
+                // Function to move the pointer
+                const movePointer = (event) => {
+                    const rect = document.body.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                    const clientTop = document.documentElement.clientTop || document.body.clientTop || 0;
+                    const clientLeft = document.documentElement.clientLeft || document.body.clientLeft || 0;
+
+                    const topOffset = rect.top + scrollTop - clientTop;
+                    const leftOffset = rect.left + scrollLeft - clientLeft;
+
+                    pointer.style.left = `${event.clientX - leftOffset - pointer.offsetWidth / 2}px`;
+                    pointer.style.top = `${event.clientY - topOffset - pointer.offsetHeight / 2}px`;
+                };
+
+                // Event listener for dragging the pointer
+                pointer.addEventListener('mousedown', () => {
+                    document.addEventListener('mousemove', movePointer);
+                });
+
+                // Stop moving the pointer when mouse button is released
+                document.addEventListener('mouseup', () => {
+                    document.removeEventListener('mousemove', movePointer);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
